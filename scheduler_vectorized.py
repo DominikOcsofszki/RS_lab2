@@ -27,21 +27,24 @@ class Scheduler:
     TICK = 1000
     SCH_MAX_TASKS = 40
     # SCH_tasks_G : Task = []
-    SCH_tasks_G: Task = np.full(40, None, dtype=Task)
+    SCH_tasks_G: Task = np.full(SCH_MAX_TASKS, None, dtype=Task)
     current_index_task = 0
+
     secondsToUpdate = 1
-
-    def __init__(self):
-        return
-
     def SCH_sleep(self):
         time.sleep(self.secondsToUpdate)
-    def SCH_Init(self):
-        self.current_index_task = 0
+
     def SCH_Init(self,secondsToUpdate):
         self.current_index_task = 0
         self.secondsToUpdate = secondsToUpdate
         self.TICK = secondsToUpdate * 1000
+
+    def __init__(self):
+        return
+
+    def SCH_Init(self):
+        self.current_index_task = 0
+
 
     def SCH_Add_Task(self, pFunction, DELAY, PERIOD):
         print(f'current index: SCH_Add_Task self.current_index_task: {self.current_index_task}')
@@ -63,25 +66,20 @@ class Scheduler:
     #     else:
     #         print("PrivateTasks are full!!!")
 
+    # def SCH_Update_old(self):
+    #     for i in range(0, self.current_index_task):
+    #         self.SCH_tasks_G[i].update()
+    #         # print(f"index {i} runMe: {self.SCH_tasks_G[i].RunMe}")
     def SCH_Update(self):
-        # print(f'current index: self.current_index_task: {self.current_index_task}')
-        for i in range(0, self.current_index_task):
-            self.SCH_tasks_G[i].update()
-            print(self.SCH_tasks_G[i].RunMe)
-        # for i in range(0, len(self.SCH_tasks_G)):
-        #     if self.SCH_tasks_G[i].Delay > 0:
-        #         self.SCH_tasks_G[i].Delay -= 1
-        #     else:
-        #         self.SCH_tasks_G[i].Delay = self.SCH_tasks_G[i].Period
-        #         self.SCH_tasks_G[i].RunMe += 1
+        [self.SCH_tasks_G[i].update() for i in range(0, self.current_index_task)]
 
+
+    # def SCH_Dispatch_Tasks_old(self):
+    #     for i in range(0, self.current_index_task):
+    #         self.SCH_tasks_G[i].runMe()
     def SCH_Dispatch_Tasks(self):
-        for i in range(0, self.current_index_task):
-            self.SCH_tasks_G[i].runMe()
-        # for i in range(0, len(self.SCH_tasks_G)):
-        #     if self.SCH_tasks_G[i].RunMe > 0:
-        #         self.SCH_tasks_G[i].RunMe -= 1
-        #         self.SCH_tasks_G[i].pTask()
+        [self.SCH_tasks_G[i].runMe() for i in range(0, self.current_index_task)]  # Vectorized?
+
 
     # def SCH_Update_old(self):
     #     for i in range(0, len(self.SCH_tasks_G)):
