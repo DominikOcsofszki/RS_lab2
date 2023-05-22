@@ -20,9 +20,10 @@ import time
 #             self.RunMe -= 1
 
 class Task:
-    def __init__(self, _pTask):
+    def __init__(self, _pTask,current_index_task):
     # def __init__(self, _pTask, _Delay, _Period):
         self.pTask = _pTask
+        self.Task_current_index_task = current_index_task
     #     self.Rest = _Delay  # self.Delay = _Delay
     #     self.Modulo = _Period  # self.Period = _Period
     #     self.RunMe = 0
@@ -47,13 +48,13 @@ class Task:
 
 class Scheduler:
     TICK = 1000
-    SCH_MAX_TASKS = 40
+    SCH_MAX_TASKS = 400
     # SCH_tasks_G : Task = []
-    SCH_tasks_G: Task = np.empty(40, dtype=Task) # removed fill, changed to empty O(N) -> O(1)
-    Rest: np.array = np.empty(40, dtype=int) # removed fill, changed to empty O(N) -> O(1)
-    Modulo: np.array = np.empty(40, dtype=int ) # removed fill, changed to empty O(N) -> O(1)
-    RunMe: np.array = np.empty(40, dtype=int ) # removed fill, changed to empty O(N) -> O(1)
+    SCH_tasks_G: np.array = np.empty(SCH_MAX_TASKS, dtype=Task) # removed fill, changed to empty O(N) -> O(1)
+    Rest: np.array = np.full(SCH_MAX_TASKS,999_999, dtype=int)
+    Modulo: np.array = np.full(SCH_MAX_TASKS,999_999, dtype=int )
     current_index_task = 0
+    # indicesToRun: np.array = np.full(SCH_MAX_TASKS,False,dtype=bool)
 
     secondsToUpdate = 1
 
@@ -72,11 +73,10 @@ class Scheduler:
         self.TICK = secondsToUpdate * 1000
 
     def SCH_Add_Task(self, pFunction, DELAY, PERIOD):
-        # print(f'current index: SCH_Add_Task self.current_index_task: {self.current_index_task}')
         if self.current_index_task < self.SCH_MAX_TASKS:
-            aTask = Task(pFunction)
-            self.Rest = DELAY / self.TICK,
-            self.Modulo = PERIOD / self.TICK
+            aTask = Task(pFunction,self.current_index_task)
+            self.Rest[self.current_index_task] = DELAY / self.TICK
+            self.Modulo[self.current_index_task] = PERIOD / self.TICK
             # aTask.TaskID = self.current_index_task
             # self.SCH_tasks_G.append(aTask)
             self.SCH_tasks_G[self.current_index_task] = aTask
@@ -104,15 +104,23 @@ class Scheduler:
     #         print("PrivateTasks are full!!!")
 
     def SCH_Update(self):
-        self.Rest = [(rest - 1) % self.Modulo for rest in self.Rest]
-        self.RunMe = [runme + 1 for runme in self.RunMe if runme <= 0]
+        self.Rest = (self.Rest - 1) % self.Modulo
 
     def SCH_Dispatch_Tasks(self):
-        # for i in range(0, len(self.SCH_tasks_G)):
-        for i in range(0, self.current_index_task):
-            if self.RunMe[i] > 0:
-                self.RunMe[i] -= 1
-                self.SCH_tasks_G[i].pTask()
+        tasksToRun = (self.Rest == 0).nonzero()[0]
+        [self.SCH_tasks_G[index].runMe() for index in tasksToRun]
+        self.Rest[tasksToRun] = self.Modulo[tasksToRun]
+
+
+        # self.SCH_tasks_G[self.indicesToRun]
+        # [self.SCH_tasks_G[i].pTask() for i in self.indicesToRun if self.indicesToRun[i]]
+        # print(self.indicesToRun)
+        # self.SCH_tasks_G[self.indicesToRun].pTask()
+        # for i in range(self.current_index_task - 1):
+        #     if self.RunMe[i] > 0:
+        #         self.RunMe[i] -= 1
+        #         self.SCH_tasks_G[i].pTask()
+
     # def SCH_Dispatch_Tasks_vec(self):
     #     [runTask() for runTask in self.SCH_tasks_G if runTask]  # Vectorized?
 
@@ -151,7 +159,7 @@ class Scheduler:
         return
 
     def SCH_GenerateID(self):
-        return -1
+        return self.current_index_task
 
 # class Task_org:
 #     def __init__(self, _pTask, _Delay, _Period):

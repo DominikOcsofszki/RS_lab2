@@ -67,6 +67,7 @@ class Scheduler:
         # print(f'current index: self.current_index_task: {self.current_index_task}')
         for i in range(0, self.current_index_task):
             self.SCH_tasks_G[i].update()
+
             # print(self.SCH_tasks_G[i].RunMe)
         # for i in range(0, len(self.SCH_tasks_G)):
         #     if self.SCH_tasks_G[i].Delay > 0:

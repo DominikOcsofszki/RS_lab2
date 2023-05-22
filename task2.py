@@ -3,5 +3,5 @@ class Task2:
         print("Initi task2")
         return
     def Task2Run(self):
-        return
+        # return
         print("Task2 is activated")

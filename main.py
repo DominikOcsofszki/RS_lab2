@@ -1,5 +1,6 @@
 import time
 
+# import scheduler as schedulerImport
 # import scheduler_refactor as schedulerImport
 # import scheduler_vectorized as schedulerImport
 import scheduler_vectorized_2 as schedulerImport
@@ -17,12 +18,12 @@ def runAll() :
     task3 = Task3()
 
 
-    # scheduler.SCH_Add_Task(task1.Task1Run, 1000, 1000)
-    # scheduler.SCH_Add_Task(task2.Task2Run, 1000, 1000)
+    # scheduler.SCH_Add_Task(task1.Task1Run, 1000, 2000)
+    # scheduler.SCH_Add_Task(task2.Task2Run, 1000, 3000)
     # scheduler.SCH_Add_Task(task3.Task3Run, 1000, 1000)
     # scheduler.SCH_Add_Task(task3.Task3Run, 1000, 1000)
-    for i in range(40) :
-        scheduler.SCH_Add_Task(task3.Task3Run, 1000, 1000)
+    for i in range(400):
+        scheduler.SCH_Add_Task(task3.Task3Run, 0000, 1000)
 
     counter = 0
 
@@ -31,15 +32,15 @@ def runAll() :
         print(f"------------------------- {counter} seconds since start:")
         scheduler.SCH_Update()
         scheduler.SCH_Dispatch_Tasks()
-        scheduler.SCH_sleep()
-        # time.sleep(secondsToUpdate)
+        # scheduler.SCH_sleep()
+        time.sleep(secondsToUpdate)
 
 
         counter += 1  # Printing
 
         scheduler.SCH_Update()
         scheduler.SCH_Dispatch_Tasks()
-
+    #
     for i in range(10**6) :
         scheduler.SCH_Update()
         scheduler.SCH_Dispatch_Tasks()
