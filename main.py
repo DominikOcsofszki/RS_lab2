@@ -1,26 +1,46 @@
 import time
 
-import scheduler
+# import scheduler_org_new as schedulerImport
+import scheduler_refactor as schedulerImport
 from task1 import *
 from task2 import *
 
-scheduler = scheduler.Scheduler()
-scheduler.SCH_Init()
+secondsToUpdate = 1
+scheduler = schedulerImport.Scheduler()
+# scheduler.SCH_Init()
+scheduler.SCH_Init(secondsToUpdate)
+
 task1 = Task1()
 task2 = Task2()
 
 
-scheduler.SCH_Add_Task(task1.Task1Run, 1000, 2000)
-scheduler.SCH_Add_Task(task2.Task2Run, 2000, 4000)
+scheduler.SCH_Add_Task(task1.Task1Run, 1000, 3000)
+scheduler.SCH_Add_Task(task2.Task2Run, 2000, 2000)
 
+counter = 0
 while True:
+    print(f"------------------------- {counter} seconds since start:")
     scheduler.SCH_Update()
     scheduler.SCH_Dispatch_Tasks()
-    time.sleep(1)
+    time.sleep(secondsToUpdate)
 
+
+    counter += 1  # Printing
 
 
 
     # max 40 different tasks
 
 
+
+# from apscheduler.schedulers.background import BackgroundScheduler,BlockingScheduler
+# from time import sleep
+# def display() :
+#     print('print sth')
+#
+#
+#
+# scheduler = BlockingScheduler()
+# scheduler.add_job(display, 'interval', seconds = 3)
+#
+# scheduler.start()
