@@ -10,8 +10,8 @@ class Task:
         self.RunMe = 0
 
     def update(self):
-        self.Rest = (self.Rest - 1) % self.Modulo
-        if (self.Rest == 0):
+        self.Rest = (self.Rest - 1) % self.Modulo  # Could we also miss the 0?
+        if self.Rest == 0:  # == 0 or <= 0? if missing updat
             self.RunMe += 1
 
     def runMe(self):
@@ -27,7 +27,7 @@ class Scheduler:
     TICK = 1000
     SCH_MAX_TASKS = 40
     # SCH_tasks_G : Task = []
-    SCH_tasks_G: Task = np.full(40, None, dtype=Task)
+    SCH_tasks_G: Task = np.empty(40, dtype=Task) # removed fill, changed to empty O(N) -> O(1)
     current_index_task = 0
     secondsToUpdate = 1
 
@@ -44,7 +44,6 @@ class Scheduler:
         self.current_index_task = 0
         self.secondsToUpdate = secondsToUpdate
         self.TICK = secondsToUpdate * 1000
-
 
     def SCH_Add_Task(self, pFunction, DELAY, PERIOD):
         print(f'current index: SCH_Add_Task self.current_index_task: {self.current_index_task}')

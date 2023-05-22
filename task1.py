@@ -3,4 +3,5 @@ class Task1:
         print("Initi task1")
         return
     def Task1Run(self):
+        return
         print("Task1 is activated")

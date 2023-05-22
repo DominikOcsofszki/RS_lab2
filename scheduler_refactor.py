@@ -44,7 +44,7 @@ class Scheduler:
         self.TICK = secondsToUpdate * 1000
 
     def SCH_Add_Task(self, pFunction, DELAY, PERIOD):
-        print(f'current index: SCH_Add_Task self.current_index_task: {self.current_index_task}')
+        # print(f'current index: SCH_Add_Task self.current_index_task: {self.current_index_task}')
         if self.current_index_task < self.SCH_MAX_TASKS:
             aTask = Task(pFunction, DELAY / self.TICK, PERIOD / self.TICK)
             aTask.TaskID = self.current_index_task
@@ -67,7 +67,7 @@ class Scheduler:
         # print(f'current index: self.current_index_task: {self.current_index_task}')
         for i in range(0, self.current_index_task):
             self.SCH_tasks_G[i].update()
-            print(self.SCH_tasks_G[i].RunMe)
+            # print(self.SCH_tasks_G[i].RunMe)
         # for i in range(0, len(self.SCH_tasks_G)):
         #     if self.SCH_tasks_G[i].Delay > 0:
         #         self.SCH_tasks_G[i].Delay -= 1
