@@ -1,7 +1,7 @@
 import time
 
-import scheduler_refactor as schedulerImport
-# import scheduler_vectorized as schedulerImport
+# import scheduler_refactor as schedulerImport
+import scheduler_vectorized as schedulerImport
 from task1 import *
 from task2 import *
 
@@ -29,20 +29,3 @@ while True:
 
     counter += 1  # Printing
 
-
-
-    # max 40 different tasks
-
-
-
-# from apscheduler.schedulers.background import BackgroundScheduler,BlockingScheduler
-# from time import sleep
-# def display() :
-#     print('print sth')
-#
-#
-#
-# scheduler = BlockingScheduler()
-# scheduler.add_job(display, 'interval', seconds = 3)
-#
-# scheduler.start()
