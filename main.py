@@ -23,8 +23,8 @@ while True:
     print(f"------------------------- {counter} seconds since start:")
     scheduler.SCH_Update()
     scheduler.SCH_Dispatch_Tasks()
-    scheduler.SCH_sleep()
-    # time.sleep(secondsToUpdate)
+    # scheduler.SCH_sleep()
+    time.sleep(secondsToUpdate)
 
 
     counter += 1  # Printing

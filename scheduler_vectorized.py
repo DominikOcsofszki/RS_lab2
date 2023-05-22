@@ -27,23 +27,23 @@ class Scheduler:
     TICK = 1000
     SCH_MAX_TASKS = 40
     # SCH_tasks_G : Task = []
-    SCH_tasks_G: Task = np.full(SCH_MAX_TASKS, None, dtype=Task)
+    SCH_tasks_G: Task = np.full(40, None, dtype=Task)
     current_index_task = 0
-
     secondsToUpdate = 1
-    def SCH_sleep(self):
-        time.sleep(self.secondsToUpdate)
-
-    def SCH_Init(self,secondsToUpdate):
-        self.current_index_task = 0
-        self.secondsToUpdate = secondsToUpdate
-        self.TICK = secondsToUpdate * 1000
 
     def __init__(self):
         return
 
+    def SCH_sleep(self):
+        time.sleep(self.secondsToUpdate)
+
     def SCH_Init(self):
         self.current_index_task = 0
+
+    def SCH_Init(self, secondsToUpdate):
+        self.current_index_task = 0
+        self.secondsToUpdate = secondsToUpdate
+        self.TICK = secondsToUpdate * 1000
 
 
     def SCH_Add_Task(self, pFunction, DELAY, PERIOD):
@@ -73,13 +73,11 @@ class Scheduler:
     def SCH_Update(self):
         [self.SCH_tasks_G[i].update() for i in range(0, self.current_index_task)]
 
-
     # def SCH_Dispatch_Tasks_old(self):
     #     for i in range(0, self.current_index_task):
     #         self.SCH_tasks_G[i].runMe()
     def SCH_Dispatch_Tasks(self):
         [self.SCH_tasks_G[i].runMe() for i in range(0, self.current_index_task)]  # Vectorized?
-
 
     # def SCH_Update_old(self):
     #     for i in range(0, len(self.SCH_tasks_G)):
