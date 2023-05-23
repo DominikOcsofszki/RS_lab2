@@ -2,7 +2,8 @@ import time
 
 # import scheduler_refactor as schedulerImport
 # import scheduler_vectorized as schedulerImport
-import scheduler_vectorized_2 as schedulerImport
+# import scheduler_vectorized_2 as schedulerImport
+import scheduler_O1 as schedulerImport
 # import scheduler as schedulerImport
 
 from task1 import *
@@ -24,7 +25,7 @@ def runAll() :
     # scheduler.SCH_Add_Task(task3.Task3Run, 1000, 1000)
     # scheduler.SCH_Add_Task(task3.Task3Run, 1000, 1000)
     for i in range(2):
-        scheduler.SCH_Add_Task(task3.Task3Run, 2000, 3000)
+        scheduler.SCH_Add_Task(task3.Task3Run, 20000, 3000)
 
     counter = 0
 
@@ -33,8 +34,8 @@ def runAll() :
         print(f"------------------------- {counter} seconds since start:")
         scheduler.SCH_Update()
         scheduler.SCH_Dispatch_Tasks()
-        # scheduler.SCH_sleep()
-        time.sleep(secondsToUpdate)
+        scheduler.SCH_sleep()
+        # time.sleep(secondsToUpdate)
 
 
         counter += 1  # Printing
