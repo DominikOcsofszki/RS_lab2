@@ -23,7 +23,7 @@ class Task_Index_Cam_Ip_Webcam:
         self.linkIP = linkIP
 
         return
-    def Task_Index_Cam_run(self):
+    def Task_run(self):
         # return
         print("Task1 is activated")
         # self.camera = cv2.VideoCapture("http://172.16.134.92:8080/video")

@@ -2,11 +2,12 @@ from keras.models import load_model  # TensorFlow is required for Keras to work
 import cv2  # Install opencv-python
 import numpy as np
 
-class Task_Index_Cam:
-    def __init__(self,index):
+class Task_Index_Cam_Ip_Webcam_ada:
+    def __init__(self,linkIP,client,nameAda):
+        self.nameAda = nameAda
         print("Initi task1")
-        self.index = index
-
+        # self.index = index
+        self.client = client
         # Disable scientific notation for clarity
         np.set_printoptions(suppress=True)
 
@@ -17,12 +18,18 @@ class Task_Index_Cam:
         self.class_names = open("labels.txt", "r").readlines()
 
         # CAMERA can be 0 or 1 based on default camera of your computer
-        self.camera = cv2.VideoCapture(self.index)
+        # self.camera = cv2.VideoCapture(self.index)
+        # self.camera = cv2.VideoCapture("IP:PORT/video")
+        # self.linkIP = "http://172.16.134.92:8080/video"
+        self.linkIP = linkIP
 
         return
     def Task_run(self):
         # return
         print("Task1 is activated")
+        # self.camera = cv2.VideoCapture("http://172.16.134.92:8080/video")
+        self.camera = cv2.VideoCapture(self.linkIP)
+
         #
         #
         #
@@ -59,6 +66,11 @@ class Task_Index_Cam:
         index = np.argmax(prediction)
         class_name = self.class_names[index]
         confidence_score = prediction[0][index]
+        print_conf_score = str(np.round(confidence_score * 100))[:-2]
+        # self.client.publish("confidence_score", print_conf_score)
+        # self.client.publish(str(self.linkIP), print_conf_score)
+        self.client.publish(self.nameAda, print_conf_score)
+        # self.client.publish("confidence_score", confidence_score)
 
         # Print prediction and confidence score
         print("Class:", class_name[2:], end="")
