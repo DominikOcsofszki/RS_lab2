@@ -1,54 +1,43 @@
-import time
+from keras.models import load_model  # TensorFlow is required for Keras to work
+from PIL import Image, ImageOps  # Install pillow instead of PIL
+import numpy as np
 
-# import scheduler_refactor as schedulerImport
-# import scheduler_vectorized as schedulerImport
-# import scheduler_vectorized_2 as schedulerImport
-import scheduler_O1 as schedulerImport
-# import scheduler as schedulerImport
+# Disable scientific notation for clarity
+np.set_printoptions(suppress=True)
 
-from task1 import *
-from task2 import *
-from task3 import *
-def runAll() :
-    secondsToUpdate = 1
-    scheduler = schedulerImport.Scheduler()
-    # scheduler.SCH_Init()
-    scheduler.SCH_Init(secondsToUpdate)
+# Load the model
+model = load_model("keras_Model.h5", compile=False)
 
-    task1 = Task1()
-    task2 = Task2()
-    task3 = Task3()
+# Load the labels
+class_names = open("labels.txt", "r").readlines()
 
+# Create the array of the right shape to feed into the keras model
+# The 'length' or number of images you can put into the array is
+# determined by the first position in the shape tuple, in this case 1
+data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
 
-    scheduler.SCH_Add_Task(task1.Task1Run, 1000, 2000)
-    scheduler.SCH_Add_Task(task2.Task2Run, 1000, 3000)
-    # scheduler.SCH_Add_Task(task3.Task3Run, 1000, 1000)
-    # scheduler.SCH_Add_Task(task3.Task3Run, 1000, 1000)
-    for i in range(2):
-        scheduler.SCH_Add_Task(task3.Task3Run, 20000, 3000)
+# Replace this with the path to your image
+image = Image.open("img/img1").convert("RGB")
 
-    counter = 0
+# resizing the image to be at least 224x224 and then cropping from the center
+size = (224, 224)
+image = ImageOps.fit(image, size, Image.Resampling.LANCZOS)
 
-    while True:
-    # while False:
-        print(f"------------------------- {counter} seconds since start:")
-        scheduler.SCH_Update()
-        scheduler.SCH_Dispatch_Tasks()
-        scheduler.SCH_sleep()
-        # time.sleep(secondsToUpdate)
+# turn the image into a numpy array
+image_array = np.asarray(image)
 
+# Normalize the image
+normalized_image_array = (image_array.astype(np.float32) / 127.5) - 1
 
-        counter += 1  # Printing
+# Load the image into the array
+data[0] = normalized_image_array
 
-        scheduler.SCH_Update()
-        scheduler.SCH_Dispatch_Tasks()
-    #
-    for i in range(10**5) :
-        scheduler.SCH_Update()
-        scheduler.SCH_Dispatch_Tasks()
+# Predicts the model
+prediction = model.predict(data)
+index = np.argmax(prediction)
+class_name = class_names[index]
+confidence_score = prediction[0][index]
 
-start = time.time()
-print(start)
-runAll()
-end = time.time() -start
-print(end)
+# Print prediction and confidence score
+print("Class:", class_name[2:], end="")
+print("Confidence Score:", confidence_score)
