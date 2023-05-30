@@ -4,17 +4,19 @@ import scheduler
 from task1 import *
 from task2 import *
 from task_index_cam import *
+from task_index_cam_ip_webcam import *
 
 scheduler = scheduler.Scheduler()
 scheduler.SCH_Init()
 # task1 = Task1()
-task1 = Task_Index_Cam(0)
-task2 = Task_Index_Cam(0)
+task1 = Task_Index_Cam_Ip_Webcam("http://172.16.134.92:8080/video")
+# task1 = Task_Index_Cam(0)
+# task2 = Task_Index_Cam(1)
 # task2 = Task2()
 
 
 scheduler.SCH_Add_Task(task1.Task_Index_Cam_run, 0, 5000)
-scheduler.SCH_Add_Task(task2.Task_Index_Cam_run, 2000, 5000)
+# scheduler.SCH_Add_Task(task2.Task_Index_Cam_run, 2000, 5000)
 
 while True:
     scheduler.SCH_Update()
